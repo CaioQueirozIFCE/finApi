@@ -6,10 +6,6 @@ const app = express();
 
 app.use(express.json());
 
-// module.exports = customers = {
-//     customers : []
-// };
-
 app.use(routes);
 
 app.use(ExceptionHandlerGlobal);
