@@ -1,11 +1,14 @@
 exports.ExceptionHandlerGlobal = (error, request, response, next) => {
+    console.log('error => ', error)
     if (error && error.statusCode) {
-        response.status(error.statusCode).json({
+        return response.status(error.statusCode).json({
             statusCode: error.statusCode,
             message: error.message
         });
     } else {
-        console.log(error);
+        return response.status(500).json({
+            message: error.message
+        });
     }
-    next();
+    return next();
 }

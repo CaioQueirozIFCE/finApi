@@ -14,7 +14,7 @@ exports.accountStore =  async (request, response) => {
 
     const passwordWithHash = await hash(password, 8);
 
-    if(typeof(balance) === String || balance === null){
+    if(typeof balance === 'string' || balance === null){
         throw new Error('Saldo inválido');
     }   
 
