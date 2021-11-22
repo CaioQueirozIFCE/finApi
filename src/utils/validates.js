@@ -42,7 +42,7 @@ exports.DateNormalize = (date) => {
     const convertDateToArray = date.split('-');
     const dateTransaction = new Date(
         convertDateToArray[0], 
-        convertDateToArray[1], 
+        +convertDateToArray[1] - 1, 
         convertDateToArray[2], 
         time.getHours(), 
         time.getMinutes(), 
