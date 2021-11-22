@@ -1,17 +1,22 @@
 
-const {validateCpf} = require('../utils/validates');
+const {compareSync} = require('bcryptjs');
 const customers = require('../database/customers');
 
 exports.verifyIfExistsAccountCpf = (request, response, next) => {
-    const { cpf,  } = request.body;
+    const { cpf,  password} = request.body;
 
-    const custumerAlreadyExists = customers.customers.some(customer => customer.cpf === cpf);
+    const user = customers.customers.find(customer => customer.cpf === cpf);
 
-    if(!custumerAlreadyExists){
+    if(!user){
         return response.status(400).json({error: "Usuário ou Senha Inválidos!"});
     }
+    const passwordIsValided = compareSync(password, user.password);
+    
+    if(!passwordIsValided){
+        return response.status(401).json({error: "Usuário ou Senha inválida!"});
+    }
 
-    request.custumerAlreadyExists = custumerAlreadyExists;
+    request.userAlreadyExists = user;
 
     return next();
 }

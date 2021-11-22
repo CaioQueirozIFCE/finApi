@@ -30,3 +30,9 @@ exports.validateCpf = (cpf) => {
     return cpf.join('').replace(regexCpf, "$1.$2.$3-$4");
 }
 
+exports.convertNumber = (value) => {
+    const segregateIntegerAndDecimals = (value + '').split('.')
+    const regex = new RegExp(/\B(?=(?:\d{3})+(?!\d))/g);
+    return `${(segregateIntegerAndDecimals[0] + '').replace(regex, ".")},${segregateIntegerAndDecimals[1] !== undefined ? 
+        (+segregateIntegerAndDecimals[1] / 10 < 1 ? segregateIntegerAndDecimals[1]+'0' : segregateIntegerAndDecimals[1]) : '00'}`;
+}

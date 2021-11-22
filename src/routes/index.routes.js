@@ -3,12 +3,12 @@ const {verifyIfExistsAccountCpf} = require('../middlewares/VerifyIfExistsAccount
 const {validateCPFMiddleware} = require('../middlewares/ValidateCPFMiddleware');
 const accountRoutes = require('./account/account.routes');
 const statementRoutes = require('./statement/statement.routes');
+const transactionRoutes = require('./transactions/index.routes');
 
 const router = new Router();
 
-
-router.use(validateCPFMiddleware);
 router.use('/account', accountRoutes);
-router.use('/list-statament', verifyIfExistsAccountCpf, statementRoutes);
+router.use('/list-statament', validateCPFMiddleware, verifyIfExistsAccountCpf, statementRoutes);
+router.use('/transaction', validateCPFMiddleware, verifyIfExistsAccountCpf, transactionRoutes);
 
 module.exports = router;

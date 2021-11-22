@@ -1,18 +1,29 @@
-const {validateCpf} = require('../../utils/validates');
 const {v4: uuidv4} = require('uuid');
 const {hash} = require('bcryptjs');
 const customers = require('../../database/customers');
+const {convertNumber} = require('../../utils/validates');
 
 exports.accountStore =  async (request, response) => {
-    const {cpf, name, password, statement} = request.body;
+    const {cpf, name, password, balance, transactions} = request.body;
+
+    const userAlreadyExists = customers.customers.some(customer => customer.cpf === cpf);
+
+    if(userAlreadyExists){
+        return response.status(400).json({error: "Usuário já cadastrado!"});
+    }
 
     const passwordWithHash = await hash(password, 8);
+
+    if(typeof(balance) === String || balance === null){
+        throw new Error('Saldo inválido');
+    }   
 
     const user = {
         cpf, 
         name,
         id: uuidv4(),
-        statement,
+        transactions,
+        balance,
         password: passwordWithHash,
     }
 
@@ -24,7 +35,8 @@ exports.accountStore =  async (request, response) => {
             cpf: user.cpf, 
             name: user.name,
             id: user.id,
-            statement: user.statement
+            balance: convertNumber(balance),
+            transactions: user.transactions
         }
     });    
 }
