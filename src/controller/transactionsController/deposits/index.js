@@ -1,5 +1,5 @@
 const customers = require('../../../database/customers');
-const {convertNumber}  = require('../../../utils/validates');
+const {convertNumber, DateNormalize}  = require('../../../utils/validates');
 
 exports.deposits = (request, response) => {
     const { transaction } = request.body; 
@@ -21,7 +21,7 @@ exports.deposits = (request, response) => {
     sendingUser.balance = newBalanceSedingUSer;
     sendingUser.transactions.push(
             {
-                date: transaction.date,
+                date: DateNormalize(transaction.date),
                 transactionOperationCpf: recipientUser.cpf,
                 transactionType:transaction.transactionType,
                 transactionValue: transaction.transactionValue,
@@ -31,14 +31,14 @@ exports.deposits = (request, response) => {
     
     recipientUser.balance += +transaction.transactionValue;
     recipientUser.transactions.push(
-        {
-            date: transaction.date,
-            transactionOperationCpf: sendingUser.cpf,
-            transactionType:transaction.transactionType,
-            transactionValue: transaction.transactionValue,
-            description: transaction.description
-        }
-    ) 
+            {
+                date: DateNormalize(transaction.date),
+                transactionOperationCpf: sendingUser.cpf,
+                transactionType:transaction.transactionType,
+                transactionValue: transaction.transactionValue,
+                description: transaction.description
+            }
+        );
 
     customers.customers[customers.customers.indexOf(sendingUser)] = sendingUser;
     customers.customers[customers.customers.indexOf(recipientUser)] = recipientUser;

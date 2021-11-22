@@ -34,5 +34,21 @@ exports.convertNumber = (value) => {
     const segregateIntegerAndDecimals = (value + '').split('.')
     const regex = new RegExp(/\B(?=(?:\d{3})+(?!\d))/g);
     return `${(segregateIntegerAndDecimals[0] + '').replace(regex, ".")},${segregateIntegerAndDecimals[1] !== undefined ? 
-        (+segregateIntegerAndDecimals[1] / 10 < 1 ? segregateIntegerAndDecimals[1]+'0' : segregateIntegerAndDecimals[1]) : '00'}`;
+        (+segregateIntegerAndDecimals[1] / 10 < 1 ? segregateIntegerAndDecimals[1]+'0' : segregateIntegerAndDecimals[1].slice(-2)) : '00'}`;
+}
+
+exports.DateNormalize = (date) => {
+    const time = new Date();
+    const convertDateToArray = date.split('-');
+    const dateTransaction = new Date(
+        convertDateToArray[0], 
+        convertDateToArray[1], 
+        convertDateToArray[2], 
+        time.getHours(), 
+        time.getMinutes(), 
+        time.getSeconds()
+    );
+
+    return dateTransaction;
+
 }

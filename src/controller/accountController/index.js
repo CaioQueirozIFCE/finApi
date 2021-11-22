@@ -42,5 +42,10 @@ exports.accountStore =  async (request, response) => {
 }
 
 exports.getAccounts = async (request, response) => {
-    return response.status(200).json({data: customers.customers});
+    return response.status(200).json({data: customers.customers.map(customer => {
+        return {
+            ...customer,
+            balance: convertNumber(customer.balance)
+        }
+    })});
 }
